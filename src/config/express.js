@@ -6,13 +6,15 @@ const helmet = require('helmet')
 
 const config = require('./variables')
 const apiRouter = require('../routes')
-
+const { handleNotFound, handleError } = require('../middlewares/handle-errors')
 const app = express()
 
 app.use(bodyParser.json(), cors(), helmet())
-app.use('/api', apiRouter)
-
 if (config.env !== 'test') app.use(morgan('combined'))
+
+app.use('/api', apiRouter)
+app.use(handleNotFound, handleNotFound)
+
 
 exports.start = () => {
     app.listen(config.port, (err) => {
