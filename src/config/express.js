@@ -5,11 +5,12 @@ const cors = require('cors')
 const helmet = require('helmet')
 
 const config = require('./variables')
-
+const apiRouter = require('../routes')
 
 const app = express()
 
 app.use(bodyParser.json(), cors(), helmet())
+app.use('/api', apiRouter)
 
 if (config.env !== 'test') app.use(morgan('combined'))
 
