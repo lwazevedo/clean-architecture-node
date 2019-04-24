@@ -5,15 +5,24 @@ const cors = require('cors')
 const helmet = require('helmet')
 
 const config = require('./variables')
+const authentication = require('../middlewares/authentication')
 const apiRouter = require('../routes')
 const { handleNotFound, handleError } = require('../middlewares/handle-errors')
+
 const app = express()
 
-app.use(bodyParser.json(), cors(), helmet())
+app.use(
+    bodyParser.json(),
+    cors(),
+    helmet(),
+    authentication(config.secret).unless({
+        path: ['/api/status', '/api/auth/signIn', '/api/auth/signUp']
+    }))
+
 if (config.env !== 'test') app.use(morgan('combined'))
 
 app.use('/api', apiRouter)
-app.use(handleNotFound, handleNotFound)
+app.use(handleNotFound, handleError)
 
 
 exports.start = () => {

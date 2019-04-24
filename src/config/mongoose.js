@@ -17,7 +17,8 @@ exports.connect = () => {
 
     mongoose.connect(mongoURI, {
         keepAlive: 1,
-        useNewUrlParser: true
+        useNewUrlParser: true,
+        useCreateIndex: true
     })
 
     return mongoose.connection
